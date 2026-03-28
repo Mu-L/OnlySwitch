@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-final class FKeySwitch: SwitchProvider {
+final class FKeySwitch: SwitchProvider, @unchecked Sendable {
     static let shared = FKeySwitch()
     var type: SwitchType = .fkey
     
@@ -116,7 +116,7 @@ enum FKeyManager {
     
     private static func getIORegistry() throws -> io_registry_entry_t {
         var mainPort: mach_port_t = .zero
-        guard IOMainPort(bootstrap_port,
+        guard IOMainPort(kIOMainPortDefault,
                          &mainPort) == KERN_SUCCESS else {
             throw FKeyManagerError.cannotCreateMasterPort
         }

@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class SmallLaunchpadIconSwitch: SwitchProvider {
+final class SmallLaunchpadIconSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .smallLaunchpadIcon
     weak var delegate: SwitchDelegate?
 

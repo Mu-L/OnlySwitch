@@ -5,7 +5,7 @@
 //  Created by Bo Liu on 06.12.25.
 //
 
-public enum ModelProvider: String {
+public enum ModelProvider: String, Sendable {
     case ollama
     case openai
     case gemini
@@ -15,7 +15,7 @@ protocol ModelTool {
     func call(arguments: ToolArguments) async throws -> String
 }
 
-public protocol AIModel {
+public protocol AIModel: Sendable {
     var model: String { get }
     var id: String { get }
 }
@@ -25,7 +25,7 @@ struct ToolArguments {
     let model: String
 }
 
-public struct ProviderModel {
+public struct ProviderModel: Sendable {
     var model: String
     var id: String 
 }

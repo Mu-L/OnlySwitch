@@ -9,7 +9,7 @@ import AppKit
 import Switches
 import Defines
 
-final class AutohideMenuBarSwitch: SwitchProvider {
+final class AutohideMenuBarSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .autohideMenuBar
 

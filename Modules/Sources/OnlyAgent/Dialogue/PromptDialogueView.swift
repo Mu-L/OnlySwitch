@@ -19,7 +19,7 @@ public struct PromptDialogueView: View {
     @State private var promptHeight: CGFloat = Layout.promptDialogHeight
     @GestureState private var dragOffset: CGFloat = 0
     
-    @Perception.Bindable var store: StoreOf<PromptDialogueReducer>
+    @SwiftUI.Bindable var store: StoreOf<PromptDialogueReducer>
     
     public init(store: StoreOf<PromptDialogueReducer>) {
         self.store = store

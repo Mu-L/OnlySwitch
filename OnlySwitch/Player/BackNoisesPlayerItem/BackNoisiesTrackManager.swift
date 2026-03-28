@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-class BackNoisesTrackManager:ObservableObject {
+final class BackNoisesTrackManager:ObservableObject, @unchecked Sendable {
     enum Tracks:String {
         case WhiteNoise = "White Noise"
         case PinkNoise = "Pink Noise"
@@ -66,7 +66,7 @@ class BackNoisesTrackManager:ObservableObject {
     }
 
     private func setPlayItem(track: Tracks) {
-        @Sendable func setTrackURL(trackURL: String) {
+        func setTrackURL(trackURL: String) {
             if let item = PlayerManager.shared.player.currentPlayerItem, item.isPlaying {
                 if item.type == .BackNoises {
                     PlayerManager.shared.player.stop()

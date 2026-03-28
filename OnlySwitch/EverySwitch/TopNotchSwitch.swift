@@ -12,7 +12,7 @@ import Switches
 import Defines
 import OSLog
 
-final class TopNotchSwitch: SwitchProvider, CurrentScreen {
+final class TopNotchSwitch: SwitchProvider, @unchecked Sendable, CurrentScreen {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .topNotch
     // MARK: - private properties

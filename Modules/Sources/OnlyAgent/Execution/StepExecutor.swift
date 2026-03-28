@@ -9,6 +9,7 @@ import Foundation
 import Extensions
 
 @available(macOS 26.0, *)
+@MainActor
 public final class StepExecutor {
     public static let shared = StepExecutor()
     private let stateObserver = StateObserver.shared
@@ -41,7 +42,6 @@ public final class StepExecutor {
     }
     
     public func observeSystemState(after step: ExecutionStep) async -> SystemState {
-        return await stateObserver.captureSystemState()
+        return stateObserver.captureSystemState()
     }
 }
-

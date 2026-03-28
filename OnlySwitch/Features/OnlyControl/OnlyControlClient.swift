@@ -16,18 +16,18 @@ struct OnlyControlClient: Sendable {
 }
 
 extension OnlyControlClient: DependencyKey {
-    static var testValue = Self()
-    static var liveValue: Self = .live
+    static var testValue: Self { Self() }
+    static var liveValue: Self { .live }
 }
 
 extension OnlyControlClient {
-    static var live: Self = .init{
+    static var live: Self { .init{
         SwitchManager.shared.barVMList
     } fetchShortcutsList: {
         SwitchManager.shared.shortcutsBarVMList()
     } fetchEvolutionList: {
         SwitchManager.shared.activeEvolutionList()
-    }
+    } }
 }
 
 extension DependencyValues {

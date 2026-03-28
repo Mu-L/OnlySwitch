@@ -10,7 +10,7 @@ import IOBluetooth
 import Switches
 import Defines
 
-final class AirPodsSwitch: SwitchProvider {
+final class AirPodsSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .airPods
     
@@ -43,8 +43,8 @@ final class AirPodsSwitch: SwitchProvider {
 
     @MainActor
     func currentInfo() async -> String {
-        guard let currentDevice else { return "" }
-        return await blManager.getAirPodsBattery(device: currentDevice)
+        guard let deviceAddress = currentDevice?.addressString else { return "" }
+        return await blManager.getAirPodsBattery(deviceAddress: deviceAddress)
     }
     
     func isVisible() -> Bool {

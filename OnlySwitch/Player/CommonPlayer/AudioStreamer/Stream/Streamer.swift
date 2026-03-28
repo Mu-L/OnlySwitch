@@ -11,7 +11,7 @@ import Foundation
 import os.log
 
 /// The `Streamer` is a concrete implementation of the `Streaming` protocol and is intended to provide a high-level, extendable class for streaming an audio file living at a URL on the internet. Subclasses can override the `attachNodes` and `connectNodes` methods to insert custom effects.
-class Streamer: Streaming {
+class Streamer: Streaming, @unchecked Sendable {
     static let logger = OSLog(subsystem: "com.fastlearner.streamer", category: "Streamer")
 
     // MARK: - Properties (Streaming)

@@ -55,10 +55,6 @@ class BackNoisesSettingVM:ObservableObject {
         }.store(in: &cancellables)
     }
     
-    deinit{
-        cancellables.removeAll()
-    }
-    
     func selectTrack(index:Int) {
         let track = backNoisesTrackManager.trackList[index]
         backNoisesTrackManager.currentTrack = track

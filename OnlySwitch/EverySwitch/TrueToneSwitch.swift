@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-final class TrueToneSwitch: SwitchProvider {
+final class TrueToneSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .trueTone
     
     var delegate: SwitchDelegate?

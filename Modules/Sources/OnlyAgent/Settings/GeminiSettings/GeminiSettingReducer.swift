@@ -41,11 +41,12 @@ public struct GeminiSettingReducer {
             switch action {
                 case .appear:
                     state.apiKey = apiKey
+                    let service = modelProviderService
                     return .run { send in
                         await send(
                             .getModels(
                                 TaskResult {
-                                    try await modelProviderService.models(.gemini).map(\.model)
+                                    try await service.models(.gemini).map(\.model)
                                 }
                             )
                         )
@@ -62,11 +63,12 @@ public struct GeminiSettingReducer {
                     state.isVerifying = true
                     modelProviderService.setAPIKey(.gemini, state.apiKey, "")
                     $apiKey.withLock { $0 = state.apiKey }
+                    let service = modelProviderService
                     return .run { send in
                        await send(
                             .verify(
                                 TaskResult {
-                                    await modelProviderService.test(.gemini)
+                                    await service.test(.gemini)
                                 }
                             )
                         )
@@ -88,4 +90,3 @@ public struct GeminiSettingReducer {
         }
     }
 }
-

@@ -64,11 +64,12 @@ public struct OllamaSettingReducer {
     }
     
     private func refresh(state: inout State) -> EffectOf<Self> {
-        .run { send in
+        let service = modelProviderService
+        return .run { send in
             await send(
                 .finishFetching(
                     TaskResult {
-                        try await modelProviderService.models(.ollama)
+                        try await service.models(.ollama)
                     }
                 )
             )

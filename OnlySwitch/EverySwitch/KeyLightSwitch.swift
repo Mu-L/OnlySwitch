@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-final class KeyLightSwitch: SwitchProvider {
+final class KeyLightSwitch: SwitchProvider, @unchecked Sendable {
     static let shared = KeyLightSwitch()
     var type: SwitchType = .keyLight
     var delegate: SwitchDelegate?

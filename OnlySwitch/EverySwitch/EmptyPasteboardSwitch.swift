@@ -9,7 +9,7 @@ import Foundation
 import AppKit
 import Switches
 
-final class EmptyPasteboardSwitch:SwitchProvider {
+final class EmptyPasteboardSwitch:SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .emptyPasteboard
     weak var delegate: SwitchDelegate?
 

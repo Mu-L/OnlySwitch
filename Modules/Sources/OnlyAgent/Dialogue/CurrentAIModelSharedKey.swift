@@ -17,7 +17,7 @@ extension SharedKey where Self == FileStorageKey<CurrentAIModel?>.Default {
     }
 }
 
-public struct CurrentAIModel: Codable, Equatable {
+public struct CurrentAIModel: Codable, Equatable, Sendable {
     let provider: String
     public let model: String
 }

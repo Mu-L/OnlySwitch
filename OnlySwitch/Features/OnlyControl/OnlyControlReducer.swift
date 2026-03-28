@@ -93,7 +93,7 @@ struct OnlyControlReducer {
                     return refreshDashboard()
 
                 case .refreshSingleSwitchType(let type):
-                    guard let switchControl = state.switchList.first(where: { $0.switchType == type}) else {
+                    guard state.switchList.first(where: { $0.switchType == type}) != nil else {
                         if type == .airPods {
                             return .send(.refreshAirPodsBattery)
                         }
@@ -103,17 +103,7 @@ struct OnlyControlReducer {
                     let additionalEffect: EffectOf<Self> = type == .airPods ? .send(.refreshAirPodsBattery) : .none
 
                     return .merge(
-                        .run { [state, switchControl] send in
-                            let isOn = await switchControl.switchOperator.currentStatus()
-                            if var item = state.dashboard.items.first(where: { $0.id == switchControl.id }) {
-                                item.status = isOn
-                                let image = (isOn ? switchControl.onImage : switchControl.offImage) ?? NSImage(named: "shortcuts_icon")!
-                                item.iconData = image
-                                    .resizeMaintainingAspectRatio(withSize: NSSize(width: 60, height: 60))!
-                                    .pngData!
-                                await send(.updateItem(item))
-                            }
-                        },
+                        .send(.refreshDashboard),
                         additionalEffect
                     )
 
@@ -146,7 +136,10 @@ struct OnlyControlReducer {
                         return .none
                     }
                     if let switchControl = control as? SwitchBarVM {
-                        switchControl.switchType.doSwitch()
+                        let switchType = switchControl.switchType
+                        Task { @MainActor in
+                            switchType.doSwitch()
+                        }
                     } else if let shortcutControl = control as? ShortcutsBarVM {
                         shortcutControl.runShortCut()
                     } else if let evolutionControl = control as? EvolutionBarVM {
@@ -155,7 +148,9 @@ struct OnlyControlReducer {
                     return .none
 
                 case .openSettings:
-                    SettingsWindow.shared.show()
+                    Task { @MainActor in
+                        SettingsWindow.shared.show()
+                    }
                     return .none
 
                 case .dashboardAction(.delegate(.orderChanged)):
@@ -172,7 +167,7 @@ struct OnlyControlReducer {
                     return .none
 
                 case .refreshAirPodsBattery:
-                    return .run { send in
+                    return .run { @MainActor send in
                         guard let airPodsSwitch = SwitchManager.shared.getSwitch(of: .airPods) as? AirPodsSwitch else {
                             await send(.updateAirPodsBattery(isConnected: false, batteryValues: []))
                             return
@@ -203,7 +198,7 @@ struct OnlyControlReducer {
     }
 
     private func refreshDashboard() -> EffectOf<Self> {
-        .run { send in
+        .run { @MainActor send in
             let switches = await client.fetchSwitchList()
             for switchControl in switches {
                 let isOn = await switchControl.switchOperator.currentStatus()

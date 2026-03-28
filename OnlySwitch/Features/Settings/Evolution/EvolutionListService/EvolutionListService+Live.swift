@@ -11,22 +11,22 @@ import Extensions
 extension EvolutionListService: DependencyKey {
     static let liveValue = Self(
         loadEvolutionList: {
-            let entities = try await EvolutionCommandEntity.fetchResult()
-            let context = PersistenceController
-                .shared
-                .container
-                .viewContext
-            var uniqueEntities = entities.unique { $0.id }
-            let unneededEntities = entities.filter { entity in
-                !uniqueEntities.contains { $0.objectID == entity.objectID }
+            try await MainActor.run {
+                let entities = try EvolutionCommandEntity.fetchResult()
+                let context = PersistenceController
+                    .shared
+                    .container
+                    .viewContext
+                let uniqueEntities = entities.unique { $0.id }
+                let unneededEntities = entities.filter { entity in
+                    !uniqueEntities.contains { $0.objectID == entity.objectID }
+                }
+                unneededEntities.forEach { entity in
+                    context.delete(entity)
+                }
+                try context.save()
+                return EvolutionAdapter.evolutionItems(uniqueEntities)
             }
-            unneededEntities.forEach { entity in
-                context.delete(entity)
-            }
-            try await context.perform {
-               try context.save()
-            }
-            return EvolutionAdapter.evolutionItems(uniqueEntities)
         },
         removeItem: { id in
             try EvolutionCommandEntity.removeItem(by: id)
@@ -43,4 +43,3 @@ extension EvolutionListService: DependencyKey {
         }
     )
 }
-

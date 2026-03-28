@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PlayerManager {
+final class PlayerManager: @unchecked Sendable {
     static let shared = PlayerManager()
     var player:AudioPlayer!
     

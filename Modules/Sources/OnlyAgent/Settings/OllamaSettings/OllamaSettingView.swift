@@ -10,7 +10,7 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 public struct OllamaSettingView: View {
-    @Perception.Bindable var store: StoreOf<OllamaSettingReducer>
+    @SwiftUI.Bindable var store: StoreOf<OllamaSettingReducer>
     
     public init(store: StoreOf<OllamaSettingReducer>) {
         self.store = store

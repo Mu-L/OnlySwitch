@@ -11,7 +11,7 @@ import Switches
 import Sharing
 
 @dynamicMemberLookup
-class EvolutionBarVM: BarProvider, ObservableObject {
+final class EvolutionBarVM: BarProvider, ObservableObject, @unchecked Sendable {
     
     @Shared(.appStorage(UserDefaults.Key.hideMenuAfterRunning)) var hideMenuAfterRunningShared: Bool = false
     

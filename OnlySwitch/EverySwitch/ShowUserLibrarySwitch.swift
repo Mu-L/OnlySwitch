@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class ShowUserLibrarySwitch: SwitchProvider {
+final class ShowUserLibrarySwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .showUserLibrary
     weak var delegate: SwitchDelegate?
     private let manager = FileManager.default

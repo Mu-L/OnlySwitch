@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class SpotifySwitch: SwitchProvider, MusicPlayerDelegate {
+final class SpotifySwitch: SwitchProvider, MusicPlayerDelegate, @unchecked Sendable {
 
     static let shared = SpotifySwitch()
     

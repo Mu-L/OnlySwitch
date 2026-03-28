@@ -11,7 +11,7 @@ import Defines
 import Extensions
 import OSLog
 
-final class ScreenSaverSwitch: SwitchProvider {
+final class ScreenSaverSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .screenSaver
     var getScreenSaverIntervalResult: String = "300"

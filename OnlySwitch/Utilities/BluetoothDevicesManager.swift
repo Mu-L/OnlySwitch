@@ -16,7 +16,7 @@ enum AirPodsBattery:String {
     case `case` = "BatteryPercentCase"
 }
 
-class BluetoothDevicesManager:NSObject {
+class BluetoothDevicesManager:NSObject, @unchecked Sendable {
     static let shared = BluetoothDevicesManager()
     private let classOfAirpods:UInt32 = 2360344
     private var disconnectComplete:(_ success:Bool, _ errorInfo:String) -> Void = {_,_ in}
@@ -40,7 +40,7 @@ class BluetoothDevicesManager:NSObject {
         IOBluetoothPreferenceSetControllerPowerState(isOn ? 1 : 0)
     }
     
-    func getAirPodsBattery(device:IOBluetoothDevice) async -> String {
+    func getAirPodsBattery(deviceAddress: String) async -> String {
         let command = "sh \(scriptDiskFilePath(scriptName: getAirpodsBatteryShell))"
         do {
             let value = try await command.runAppleScript(isShellCMD: true)
@@ -56,7 +56,7 @@ class BluetoothDevicesManager:NSObject {
                       let batteryInfo = datas.last else {
                           continue
                       }
-                if address.trimmingCharacters(in: .whitespaces) == device.addressString.convertMacAdrress() {
+                if address.trimmingCharacters(in: .whitespaces) == deviceAddress.convertMacAdrress() {
                     currentAirPodsBattery = batteryInfo
                     break
                 }

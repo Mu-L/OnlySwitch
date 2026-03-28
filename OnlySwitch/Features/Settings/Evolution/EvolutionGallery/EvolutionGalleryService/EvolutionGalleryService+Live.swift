@@ -9,7 +9,7 @@ import Foundation
 import Dependencies
 
 extension EvolutionGalleryService: DependencyKey {
-    static var liveValue = Self(
+    static var liveValue: Self { Self(
         fetchGalleryList: {
             do {
                 let evolutionGalleryModels = try await GitHubPresenter.shared.requestEvolutionJson()
@@ -37,5 +37,5 @@ extension EvolutionGalleryService: DependencyKey {
         addGallery: { item in
             try EvolutionCommandEntity.addItem(item: item)
         }
-    )
+    ) }
 }

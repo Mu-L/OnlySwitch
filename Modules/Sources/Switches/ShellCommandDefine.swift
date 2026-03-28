@@ -15,19 +15,19 @@ public protocol SwitchCMD {
 }
 
 public struct HideDesktopCMD:SwitchCMD {
-    public static var status: String = "defaults read com.apple.finder CreateDesktop"
-    public static var on: String = "defaults write com.apple.finder CreateDesktop 0; killall Finder"
-    public static var off: String = "defaults write com.apple.finder CreateDesktop 1; killall Finder"
+    public static let status: String = "defaults read com.apple.finder CreateDesktop"
+    public static let on: String = "defaults write com.apple.finder CreateDesktop 0; killall Finder"
+    public static let off: String = "defaults write com.apple.finder CreateDesktop 1; killall Finder"
 }
 
 public struct DarkModeCMD:SwitchCMD {
-    public static var status: String = "defaults read -g AppleInterfaceStyle"
-    public static var status_applescript = """
+    public static let status: String = "defaults read -g AppleInterfaceStyle"
+    public static let status_applescript = """
                                     tell application "System Events"
                                         tell appearance preferences to get dark mode
                                     end tell
                                     """
-    public static var on: String = """
+    public static let on: String = """
                             tell application "System Events"
                                 tell appearance preferences
                                     set dark mode to true
@@ -35,7 +35,7 @@ public struct DarkModeCMD:SwitchCMD {
                             end tell
                             """
     
-    public static var off: String = """
+    public static let off: String = """
                                tell application "System Events"
                                    tell appearance preferences
                                        set dark mode to false
@@ -56,30 +56,30 @@ public struct VolumeCMD {
 
 
 public struct ScreenSaverCMD:SwitchCMD {
-    public static var status: String = "tell application \"System Events\" to tell screen saver preferences to get delay interval"
-    public static var on: String = "tell application \"System Events\" to tell screen saver preferences to set delay interval to " // + value
-    public static var off: String = "tell application \"System Events\" to tell screen saver preferences to set delay interval to 0"
+    public static let status: String = "tell application \"System Events\" to tell screen saver preferences to get delay interval"
+    public static let on: String = "tell application \"System Events\" to tell screen saver preferences to set delay interval to " // + value
+    public static let off: String = "tell application \"System Events\" to tell screen saver preferences to set delay interval to 0"
 }
 
 public struct AutohideDockCMD:SwitchCMD {
-    public static var status: String = "tell application \"System Events\" to get the autohide of the dock preferences"
-    public static var on: String = "tell application \"System Events\" to set the autohide of the dock preferences to true"
-    public static var off: String = "tell application \"System Events\" to set the autohide of the dock preferences to false"
+    public static let status: String = "tell application \"System Events\" to get the autohide of the dock preferences"
+    public static let on: String = "tell application \"System Events\" to set the autohide of the dock preferences to true"
+    public static let off: String = "tell application \"System Events\" to set the autohide of the dock preferences to false"
 }
 
 
 public struct AutoHideMenuBarCMD:SwitchCMD {
-    public static var status: String = """
+    public static let status: String = """
                                     tell application "System Events"
                                         tell dock preferences to get autohide menu bar
                                     end tell
                                 """
-    public static var on: String = """
+    public static let on: String = """
                                 tell application "System Events"
                                     tell dock preferences to set autohide menu bar to true
                                 end tell
                             """
-    public static var off: String = """
+    public static let off: String = """
                                 tell application "System Events"
                                     tell dock preferences to set autohide menu bar to false
                                 end tell
@@ -88,9 +88,9 @@ public struct AutoHideMenuBarCMD:SwitchCMD {
 
 
 public struct ShowHiddenFilesCMD:SwitchCMD {
-    public static var status: String = "defaults read com.apple.Finder AppleShowAllFiles"
-    public static var on: String = "defaults write com.apple.Finder AppleShowAllFiles true; killall Finder"
-    public static var off: String = "defaults write com.apple.Finder AppleShowAllFiles false; killall Finder"
+    public static let status: String = "defaults read com.apple.Finder AppleShowAllFiles"
+    public static let on: String = "defaults write com.apple.Finder AppleShowAllFiles true; killall Finder"
+    public static let off: String = "defaults write com.apple.Finder AppleShowAllFiles false; killall Finder"
 }
 
 
@@ -102,9 +102,9 @@ public let emptyTrashCMD = """
                     """
 
 public struct ShowExtensionNameCMD:SwitchCMD {
-    public static var status: String = "defaults read NSGlobalDomain AppleShowAllExtensions"
-    public static var on: String = "defaults write NSGlobalDomain AppleShowAllExtensions -bool true; killall Finder"
-    public static var off: String = "defaults write NSGlobalDomain AppleShowAllExtensions -bool false; killall Finder"
+    public static let status: String = "defaults read NSGlobalDomain AppleShowAllExtensions"
+    public static let on: String = "defaults write NSGlobalDomain AppleShowAllExtensions -bool true; killall Finder"
+    public static let off: String = "defaults write NSGlobalDomain AppleShowAllExtensions -bool false; killall Finder"
 }
 
 public struct SmallLaunchpadCMD:SwitchCMD {
@@ -132,9 +132,9 @@ public struct ShowPathBarCMD:SwitchCMD {
 }
 
 public struct ShowDockRecentCMD:SwitchCMD {
-    public static var on: String = "defaults write com.apple.dock show-recents -bool true; killall Dock"
+    public static let on: String = "defaults write com.apple.dock show-recents -bool true; killall Dock"
 
-    public static var off: String = "defaults write com.apple.dock show-recents -bool false; killall Dock"
+    public static let off: String = "defaults write com.apple.dock show-recents -bool false; killall Dock"
 
     public static let status:String = "defaults read com.apple.dock show-recents"
 }

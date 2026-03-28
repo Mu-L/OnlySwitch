@@ -14,7 +14,7 @@ import Switches
 
 let bufferSize = 512
 
-class JLASAudioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate, AudioPlayer {
+final class JLASAudioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate, AudioPlayer, @unchecked Sendable {
     
     let queue = DispatchQueue(label: "com.springRadio.spectrum")
     lazy var audioPlayer: Streamer = {
@@ -172,4 +172,3 @@ class JLASAudioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate, AudioPl
         
     }
 }
-

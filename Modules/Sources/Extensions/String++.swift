@@ -24,6 +24,7 @@ public extension String {
     }
 }
 
+@MainActor
 fileprivate class AppleScriptExecutor {
     static let shared = AppleScriptExecutor()
     private let queue = DispatchQueue(label: "com.onlyswitch.applescript", qos: .utility)

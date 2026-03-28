@@ -8,7 +8,7 @@
 import Foundation
 
 @available(macOS 26.0, *)
-public struct ExecutionStep: Identifiable, Equatable {
+public struct ExecutionStep: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let stepNumber: Int
     public let description: String
@@ -37,7 +37,7 @@ public struct ExecutionStep: Identifiable, Equatable {
 }
 
 @available(macOS 26.0, *)
-public enum StepStatus: Equatable {
+public enum StepStatus: Equatable, Sendable {
     case pending
     case executing
     case completed
@@ -46,7 +46,7 @@ public enum StepStatus: Equatable {
 }
 
 @available(macOS 26.0, *)
-public struct StepResult: Codable, Equatable {
+public struct StepResult: Codable, Equatable, Sendable {
     public let stepId: UUID
     public let success: Bool
     public let output: String?
@@ -67,4 +67,3 @@ public struct StepResult: Codable, Equatable {
         self.executionTime = executionTime
     }
 }
-

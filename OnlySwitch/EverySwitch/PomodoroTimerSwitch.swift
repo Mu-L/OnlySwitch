@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-final class PomodoroTimerSwitch: SwitchProvider {
+final class PomodoroTimerSwitch: SwitchProvider, @unchecked Sendable {
     static let shared = PomodoroTimerSwitch()
     weak var delegate: SwitchDelegate?
     enum Status:String {
@@ -180,4 +180,3 @@ final class PomodoroTimerSwitch: SwitchProvider {
         self.status = .none
     }
 }
-

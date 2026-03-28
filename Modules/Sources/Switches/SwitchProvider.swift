@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 /// protocol for every switch
-public protocol SwitchProvider:AnyObject {
+public protocol SwitchProvider:AnyObject, Sendable {
     var type: SwitchType { get }
     var delegate: SwitchDelegate? { get set }
     var hint: String? { get }

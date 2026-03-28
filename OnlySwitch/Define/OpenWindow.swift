@@ -9,6 +9,7 @@ import Defines
 import SwiftUI
 import AppKit
 
+@MainActor
 enum OpenWindows: CurrentScreen {
     case Setting
     case Update(GitHubPresenter)
@@ -46,6 +47,7 @@ enum OpenWindows: CurrentScreen {
     }
 }
 
+@MainActor
 struct Router {
     static var settingWindowController: NSWindowController?
 
@@ -58,6 +60,7 @@ struct Router {
     }
 }
 
+@MainActor
 class HostWindow:NSWindow, NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         print("close window")
@@ -69,4 +72,3 @@ class HostWindow:NSWindow, NSWindowDelegate {
         return true
     }
 }
-

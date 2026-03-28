@@ -13,13 +13,15 @@ import AppKit
 import SwiftUI
 import Sharing
 
-final class AICommanderSwitch: SwitchProvider {
+final class AICommanderSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .aiCommender
     
     
     private lazy var eventMonitor : EventMonitor = {
-        EventMonitor(mask: [.leftMouseDown, .rightMouseDown], handler: mouseEventHandler)
+        EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+            self?.mouseEventHandler(event)
+        }
     }()
     
     private var promptDialogueWindow: NSWindow?
@@ -29,7 +31,6 @@ final class AICommanderSwitch: SwitchProvider {
         promptDialogueWindow?.isVisible == true
     }
     
-    @MainActor
     private var _store: Any?
     
     @MainActor

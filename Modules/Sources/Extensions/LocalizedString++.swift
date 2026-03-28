@@ -15,34 +15,26 @@ public extension Bundle {
         return appIdentifier
     }
 
-    private static let languageUserDefaults = UserDefaults(suiteName: "\(appIdentifier)OnlySwitch.shared")
-    private static var bundle: Bundle!
-    private static var supportLangs = ["en", "zh", "de", "hr", "tr","pl", "fil", "nl", "it", "ru", "es","ja", "so","kr","fr","uk","sk","pt-BR", "cs"]
-    static func localizedBundle() -> Bundle! {
-        if bundle == nil {
-            let appLang = languageUserDefaults?.string(forKey: UserDefaults.Key.AppLanguage) ?? "en"
-            let path = Bundle.main.path(forResource: appLang, ofType: "lproj")
-            if let path = path {
-                bundle = Bundle(path: path)
-            } else {
-                let path = Bundle.main.path(forResource: "en", ofType: "lproj")
-                bundle = Bundle(path: path!)
-            }
+    private static var languageUserDefaults: UserDefaults? {
+        UserDefaults(suiteName: "\(appIdentifier)OnlySwitch.shared")
+    }
+    private static let supportLangs = ["en", "zh", "de", "hr", "tr", "pl", "fil", "nl", "it", "ru", "es", "ja", "so", "kr", "fr", "uk", "sk", "pt-BR", "cs"]
 
+    static func localizedBundle() -> Bundle {
+        let appLang = languageUserDefaults?.string(forKey: UserDefaults.Key.AppLanguage) ?? "en"
+        if let path = Bundle.main.path(forResource: appLang, ofType: "lproj"),
+           let localized = Bundle(path: path) {
+            return localized
         }
-
-        return bundle;
+        if let fallbackPath = Bundle.main.path(forResource: "en", ofType: "lproj"),
+           let fallback = Bundle(path: fallbackPath) {
+            return fallback
+        }
+        return .main
     }
 
     static func setLanguage(lang: String) {
         languageUserDefaults?.set(lang, forKey: UserDefaults.Key.AppLanguage)
-        let path = Bundle.main.path(forResource: lang, ofType: "lproj")
-        if let path = path {
-            bundle = Bundle(path: path)
-        } else {
-            let path = Bundle.main.path(forResource: "en", ofType: "lproj")
-            bundle = Bundle(path: path!)
-        }
     }
 
     static func currentLanguage() -> String {

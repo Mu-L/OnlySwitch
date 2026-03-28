@@ -9,7 +9,7 @@ import AppKit
 import Combine
 import Switches
 
-final class NightShiftSwitch: SwitchProvider {
+final class NightShiftSwitch: SwitchProvider, @unchecked Sendable {
     static let shared = NightShiftSwitch()
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .nightShift
@@ -108,7 +108,7 @@ final class NightShiftSwitch: SwitchProvider {
 }
 
 class NightShiftTool {
-    private static let client = CBBlueLightClient()
+    nonisolated(unsafe) private static let client = CBBlueLightClient()
 
     private static var blueLightStatus: Status {
         var status: Status = Status()

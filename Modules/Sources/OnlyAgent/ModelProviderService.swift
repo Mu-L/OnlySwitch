@@ -18,7 +18,7 @@ public struct ModelProviderService: Sendable {
 
 @available(macOS 26.0, *)
 extension ModelProviderService: DependencyKey {
-    static public var liveValue: Self = {
+    static public var liveValue: Self {
         let ollamaClient = OllamaLive()
         let openAIClient = OpenAILive()
         let geminiClient = GeminiLive()
@@ -60,9 +60,9 @@ extension ModelProviderService: DependencyKey {
                     return await geminiClient.test()
             }
         }
-    }()
+    }
     
-    static public var testValue = Self()
+    static public var testValue: Self { Self() }
 }
 
 @available(macOS 26.0, *)

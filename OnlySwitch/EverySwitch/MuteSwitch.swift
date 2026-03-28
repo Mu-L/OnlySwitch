@@ -10,7 +10,7 @@ import AppKit
 import Switches
 import Defines
 
-final class MuteSwitch: SwitchProvider {
+final class MuteSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .mute
     private let muteSwitchOperator:MuteSwitchProtocal = NSMuteSwitchOperator()
@@ -87,12 +87,12 @@ final class MuteSwitch: SwitchProvider {
 
 }
 
-protocol MuteSwitchProtocal {
+protocol MuteSwitchProtocal: Sendable {
     func currentStatus() async -> Bool
     func operationSwitch(isOn: Bool) async throws
 }
 
-class NSMuteSwitchOperator: MuteSwitchProtocal {
+final class NSMuteSwitchOperator: MuteSwitchProtocal, @unchecked Sendable {
     func currentStatus() async -> Bool {
         if NSSound.systemVolumeIsMuted {
             return true
@@ -127,7 +127,7 @@ class NSMuteSwitchOperator: MuteSwitchProtocal {
     }
 }
 
-class ASMuteSwitchOperator: MuteSwitchProtocal {
+final class ASMuteSwitchOperator: MuteSwitchProtocal, @unchecked Sendable {
     func currentStatus() async -> Bool {
         do {
             let result = try await VolumeCMD.getOutput.runAppleScript()

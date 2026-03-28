@@ -10,7 +10,7 @@ import Switches
 import Defines
 import Extensions
 
-final class HideMenubarIconsSwitch: SwitchProvider {
+final class HideMenubarIconsSwitch: SwitchProvider, @unchecked Sendable {
     static let shared = HideMenubarIconsSwitch()
     var type: SwitchType = .hideMenubarIcons
     

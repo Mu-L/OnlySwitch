@@ -11,7 +11,7 @@ import LaunchAtLogin
 import Switches
 import Defines
 
-final class SwitchManager {
+final class SwitchManager: @unchecked Sendable {
     static let shared = SwitchManager()
     
     private var shownSwitchMap = [SwitchType: SwitchProvider?]()
@@ -67,6 +67,7 @@ final class SwitchManager {
         return list
     }
 
+    @MainActor
     func registerSwitchesShouldShow() {
         let state = getAllSwitchState()
         for index in 0..<switchTypeCount {
@@ -116,4 +117,3 @@ final class SwitchManager {
         return bars.compactMap{$0}
     }
 }
-

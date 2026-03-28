@@ -94,6 +94,8 @@ public struct PromptDialogueReducer {
     public var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
+            let promptService = promptDialogueService
+            let providerService = modelProviderService
             switch action {
                 case .appear:
                     state.prompt = ""
@@ -110,8 +112,8 @@ public struct PromptDialogueReducer {
                         await send(
                             .loadModels(
                                 TaskResult {
-                                    let openaiModels = try await modelProviderService.models(.openai)
-                                    let geminiModels = try await modelProviderService.models(.gemini)
+                                    let openaiModels = try await providerService.models(.openai)
+                                    let geminiModels = try await providerService.models(.gemini)
                                     return [
                                         .openai: openaiModels.map(\.model),
                                         .gemini: geminiModels.map(\.model)
@@ -172,7 +174,7 @@ public struct PromptDialogueReducer {
                                 .planGenerated(
                                     TaskResult {
                                         let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                                        return try await promptDialogueService.generatePlan(
+                                        return try await promptService.generatePlan(
                                             prompt,
                                             context,
                                             modelProvider,
@@ -197,7 +199,7 @@ public struct PromptDialogueReducer {
                                 .generateAppleScript(
                                     TaskResult {
                                         let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                                        return try await promptDialogueService.request(.purpose(prompt), modelProvider, currentAIModel.model, isAgentMode)
+                                        return try await promptService.request(.purpose(prompt), modelProvider, currentAIModel.model, isAgentMode)
                                     }
                                 )
                             )
@@ -216,7 +218,7 @@ public struct PromptDialogueReducer {
                         }
                         return .run { [isAgentMode, currentAIModel] send in
                             let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                            _ = try await promptDialogueService.request(.success, modelProvider, currentAIModel.model, isAgentMode)
+                            _ = try await promptService.request(.success, modelProvider, currentAIModel.model, isAgentMode)
                         }
                     } else {
                         return .none
@@ -237,7 +239,7 @@ public struct PromptDialogueReducer {
                         }
                         return .run { [isAgentMode, currentAIModel] send in
                             let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                            _ = try await promptDialogueService.request(.failure, modelProvider, currentAIModel.model, isAgentMode)
+                            _ = try await promptService.request(.failure, modelProvider, currentAIModel.model, isAgentMode)
                         }
                     }
                     
@@ -248,7 +250,7 @@ public struct PromptDialogueReducer {
                         await send(
                             .finishExecution(
                                 TaskResult {
-                                    try await promptDialogueService.execute(appleScript)
+                                    try await promptService.execute(appleScript)
                                 }
                             )
                         )
@@ -263,7 +265,7 @@ public struct PromptDialogueReducer {
                     }
                     return .run { [isAgentMode, currentAIModel] send in
                         let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                        _ = try await promptDialogueService.request(.success, modelProvider, currentAIModel.model, isAgentMode)
+                        _ = try await promptService.request(.success, modelProvider, currentAIModel.model, isAgentMode)
                     }
                     
                 case let .finishExecution(.failure(error)):
@@ -276,7 +278,7 @@ public struct PromptDialogueReducer {
                     }
                     return .run { [isAgentMode, currentAIModel] send in
                         let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                        _ = try await promptDialogueService.request(.failure, modelProvider, currentAIModel.model, isAgentMode)
+                        _ = try await promptService.request(.failure, modelProvider, currentAIModel.model, isAgentMode)
                     }
                     
                 case .disappear:
@@ -306,7 +308,7 @@ public struct PromptDialogueReducer {
                             .planGenerated(
                                 TaskResult {
                                     let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                                    return try await promptDialogueService.generatePlan(
+                                    return try await promptService.generatePlan(
                                         prompt,
                                         context,
                                         modelProvider,
@@ -364,7 +366,7 @@ public struct PromptDialogueReducer {
                             .stepCompleted(
                                 step.stepNumber,
                                 TaskResult {
-                                    try await promptDialogueService.executeStep(step)
+                                    try await promptService.executeStep(step)
                                 }
                             )
                         )
@@ -445,7 +447,7 @@ public struct PromptDialogueReducer {
                                     stepNumber,
                                     TaskResult {
                                         let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                                        return try await promptDialogueService.generateFix(
+                                        return try await promptService.generateFix(
                                             step,
                                             error.localizedDescription,
                                             context,
@@ -481,7 +483,7 @@ public struct PromptDialogueReducer {
                             .nextStepGenerated(
                                 TaskResult {
                                     let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                                    return try await promptDialogueService.generateNextStep(
+                                    return try await promptService.generateNextStep(
                                         context.executionHistory,
                                         remainingGoal,
                                         context,
@@ -543,7 +545,7 @@ public struct PromptDialogueReducer {
                                 step.stepNumber,
                                 TaskResult {
                                     let modelProvider = ModelProvider(rawValue: currentAIModel.provider) ?? .ollama
-                                    return try await promptDialogueService.generateFix(
+                                    return try await promptService.generateFix(
                                         step,
                                         errorMessage,
                                         context,
@@ -571,4 +573,3 @@ public struct PromptDialogueReducer {
         }
     }
 }
-

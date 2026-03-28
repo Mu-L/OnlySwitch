@@ -9,9 +9,9 @@ import Foundation
 import Switches
 import Defines
 
-final class AppleMusicSwitch: SwitchProvider, MusicPlayerDelegate {
+final class AppleMusicSwitch: SwitchProvider, @unchecked Sendable, MusicPlayerDelegate {
     
-    static let shared = AppleMusicSwitch()
+    @MainActor static let shared = AppleMusicSwitch()
     
     var type: SwitchType = .applemusic
     

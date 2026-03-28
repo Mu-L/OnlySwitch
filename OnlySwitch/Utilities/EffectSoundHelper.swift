@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-class EffectSoundHelper:ObservableObject {
+final class EffectSoundHelper:ObservableObject, @unchecked Sendable {
     var player = AVAudioPlayer()
     
     static let shared = EffectSoundHelper()

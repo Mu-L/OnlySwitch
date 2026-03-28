@@ -7,8 +7,10 @@
 
 import Foundation
 
+extension CBTrueToneClient: @unchecked Sendable {}
+
 extension CBTrueToneClient {
-    static var shared = CBTrueToneClient()
+    static let shared = CBTrueToneClient()
 
     var isTrueToneSupported: Bool {
         supported()

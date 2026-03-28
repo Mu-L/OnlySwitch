@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class EmptyTrashSwitch:SwitchProvider {
+final class EmptyTrashSwitch:SwitchProvider, @unchecked Sendable {
 
     var type: SwitchType = .emptyTrash
     weak var delegate: SwitchDelegate?

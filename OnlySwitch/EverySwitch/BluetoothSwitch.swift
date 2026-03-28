@@ -8,7 +8,7 @@
 import AppKit
 import Switches
 
-final class BluetoothSwitch: SwitchProvider {
+final class BluetoothSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .bluetooth
     let blManager = BluetoothDevicesManager.shared

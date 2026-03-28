@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class ShowExtensionNameSwitch: SwitchProvider {
+final class ShowExtensionNameSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .showExtensionName
     weak var delegate: SwitchDelegate?
 

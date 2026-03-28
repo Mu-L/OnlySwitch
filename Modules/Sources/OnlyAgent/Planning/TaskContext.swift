@@ -8,7 +8,7 @@
 import Foundation
 
 @available(macOS 26.0, *)
-public struct TaskContext: Codable, Equatable {
+public struct TaskContext: Codable, Equatable, Sendable {
     public let originalPrompt: String
     public let goal: String
     public let constraints: [String]
@@ -37,7 +37,7 @@ public struct TaskContext: Codable, Equatable {
 }
 
 @available(macOS 26.0, *)
-public struct SystemState: Codable, Equatable {
+public struct SystemState: Codable, Equatable, Sendable {
     public let runningApplications: [String]
     public let activeWindows: [String]
     public let recentFileChanges: [String]
@@ -60,7 +60,7 @@ public struct SystemState: Codable, Equatable {
 }
 
 @available(macOS 26.0, *)
-public struct StateDiff: Equatable {
+public struct StateDiff: Equatable, Sendable {
     public let newApplications: [String]
     public let closedApplications: [String]
     public let newWindows: [String]
@@ -84,4 +84,3 @@ public struct StateDiff: Equatable {
         self.settingChanges = settingChanges
     }
 }
-

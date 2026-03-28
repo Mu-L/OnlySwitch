@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import Switches
 
-final class DimScreenSwitch: SwitchProvider {
+final class DimScreenSwitch: SwitchProvider, @unchecked Sendable {
     enum DimScreenError:Error {
         case brightnessTooLow
     }

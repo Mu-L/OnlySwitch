@@ -9,7 +9,7 @@ import Dependencies
 import Foundation
 
 extension KeyLightService: DependencyKey {
-    static var liveValue: KeyLightService = Self(
+    static var liveValue: KeyLightService { Self(
         loadKeyboardManager: {
             KeyboardManager.configure()
         },
@@ -29,5 +29,5 @@ extension KeyLightService: DependencyKey {
         autoBrightness: {
             BrightnessControl.isAutoBrightnessEnabled()
         }
-    )
+    ) }
 }

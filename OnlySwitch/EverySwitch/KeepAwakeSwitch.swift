@@ -12,7 +12,7 @@ import Combine
 import Switches
 import Defines
 
-final class KeepAwakeSwitch: SwitchProvider {
+final class KeepAwakeSwitch: SwitchProvider, @unchecked Sendable {
     static let shared = KeepAwakeSwitch()
     var type: SwitchType = .keepAwake
     weak var delegate: SwitchDelegate?

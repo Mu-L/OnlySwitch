@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-final class EjectDiscsSWitch: SwitchProvider {
+final class EjectDiscsSWitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .ejectDiscs
     
     var delegate: SwitchDelegate?

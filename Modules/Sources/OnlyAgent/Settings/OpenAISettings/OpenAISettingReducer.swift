@@ -44,11 +44,12 @@ public struct OpenAISettingReducer {
                 case .appear:
                     state.apiKey = apiKey
                     state.host = host
+                    let service = modelProviderService
                     return .run { send in
                         await send(
                             .getModels(
                                 TaskResult {
-                                    try await modelProviderService.models(.openai).map(\.model)
+                                    try await service.models(.openai).map(\.model)
                                 }
                             )
                         )
@@ -59,11 +60,12 @@ public struct OpenAISettingReducer {
                     modelProviderService.setAPIKey(.openai, state.apiKey, state.host)
                     $apiKey.withLock { $0 = state.apiKey }
                     $host.withLock { $0 = state.host }
+                    let service = modelProviderService
                     return .run { send in
                        await send(
                             .verify(
                                 TaskResult {
-                                    await modelProviderService.test(.openai)
+                                    await service.test(.openai)
                                 }
                             )
                         )

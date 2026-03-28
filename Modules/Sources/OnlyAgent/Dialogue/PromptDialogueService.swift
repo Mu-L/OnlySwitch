@@ -58,12 +58,9 @@ public struct PromptDialogueService: Sendable {
 @available(macOS 26.0, *)
 extension PromptDialogueService: DependencyKey {
     public static let liveValue: Self = {
-        let generater = AgentCommandGenerater()
-        let planner = TaskPlanner()
-        let executor = StepExecutor.shared
-        
         return .init { prompt, modelProvider, model, isAgentMode in
-            let script = try await generater.execute(
+            let generator = AgentCommandGenerater()
+            let script = try await generator.execute(
                 prompt: prompt,
                 modelProvider: modelProvider,
                 model: model,
@@ -73,14 +70,16 @@ extension PromptDialogueService: DependencyKey {
         } execute: { script in
             _ = try await script.runAppleScript()
         } generatePlan: { prompt, context, modelProvider, model in
-            try await planner.generateInitialPlan(
+            let planner = TaskPlanner()
+            return try await planner.generateInitialPlan(
                 prompt: prompt,
                 context: context,
                 modelProvider: modelProvider,
                 model: model
             )
         } generateNextStep: { history, remainingGoal, context, modelProvider, model in
-            try await planner.generateNextStep(
+            let planner = TaskPlanner()
+            return try await planner.generateNextStep(
                 history: history,
                 remainingGoal: remainingGoal,
                 context: context,
@@ -88,9 +87,10 @@ extension PromptDialogueService: DependencyKey {
                 model: model
             )
         } executeStep: { step in
-            try await executor.executeStep(step)
+            return try await StepExecutor.shared.executeStep(step)
         } generateFix: { failedStep, error, context, modelProvider, model in
-            try await planner.generateFixForStep(
+            let planner = TaskPlanner()
+            return try await planner.generateFixForStep(
                 failedStep: failedStep,
                 error: error,
                 context: context,

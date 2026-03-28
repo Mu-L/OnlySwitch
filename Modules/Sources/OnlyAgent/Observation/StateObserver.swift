@@ -9,14 +9,15 @@ import Foundation
 import AppKit
 
 @available(macOS 26.0, *)
+@MainActor
 public final class StateObserver {
     public static let shared = StateObserver()
     
     private init() {}
     
-    public func captureSystemState() async -> SystemState {
-        let runningApps = await getRunningApplications()
-        let activeWindows = await getActiveWindows()
+    public func captureSystemState() -> SystemState {
+        let runningApps = getRunningApplications()
+        let activeWindows = getActiveWindows()
         let fileChanges: [String] = [] // Can be enhanced with file system monitoring
         let systemSettings: [String: String] = [:] // Can be enhanced with settings monitoring
         
@@ -53,26 +54,21 @@ public final class StateObserver {
         )
     }
     
-    private func getRunningApplications() async -> [String] {
-        return await MainActor.run {
-            let workspace = NSWorkspace.shared
-            return workspace.runningApplications.compactMap { app in
-                app.localizedName
-            }
+    private func getRunningApplications() -> [String] {
+        let workspace = NSWorkspace.shared
+        return workspace.runningApplications.compactMap { app in
+            app.localizedName
         }
     }
     
-    private func getActiveWindows() async -> [String] {
-        return await MainActor.run {
-            var windowNames: [String] = []
-            let workspace = NSWorkspace.shared
-            for app in workspace.runningApplications {
-                if let name = app.localizedName {
-                    windowNames.append(name)
-                }
+    private func getActiveWindows() -> [String] {
+        var windowNames: [String] = []
+        let workspace = NSWorkspace.shared
+        for app in workspace.runningApplications {
+            if let name = app.localizedName {
+                windowNames.append(name)
             }
-            return windowNames
         }
+        return windowNames
     }
 }
-

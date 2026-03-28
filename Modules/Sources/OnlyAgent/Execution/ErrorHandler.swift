@@ -8,7 +8,7 @@
 import Foundation
 
 @available(macOS 26.0, *)
-public enum RetryStrategy {
+public enum RetryStrategy: Sendable {
     case immediateRetry
     case fixAndRetry
     case skipAndContinue
@@ -16,7 +16,7 @@ public enum RetryStrategy {
 }
 
 @available(macOS 26.0, *)
-public final class ErrorHandler {
+public actor ErrorHandler {
     public static let shared = ErrorHandler()
     
     private init() {}
@@ -55,4 +55,3 @@ public final class ErrorHandler {
         return nonCriticalKeywords.contains { error.contains($0) }
     }
 }
-

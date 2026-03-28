@@ -11,13 +11,13 @@ import os.log
 
 /// The `Downloader` is a concrete implementation of the `Downloading` protocol
 /// using `URLSession` as the backing HTTP/HTTPS implementation.
-public class Downloader: NSObject, Downloading {
+public final class Downloader: NSObject, Downloading, @unchecked Sendable {
     static let logger = OSLog(subsystem: "com.fastlearner.streamer", category: "Downloader")
     
     // MARK: - Singleton
     
     /// A singleton that can be used to perform multiple download requests using a common cache.
-    public static var shared: Downloader = Downloader()
+    public static let shared: Downloader = Downloader()
     
     // MARK: - Properties
     

@@ -143,10 +143,6 @@ class GeneralVM: ObservableObject {
         }.store(in: &cancellable)
     }
     
-    deinit {
-        cancellable.removeAll()
-    }
-    
     func clearCache() {
         do {
             try WallpaperManager.shared.clearCache()
@@ -166,8 +162,9 @@ class GeneralVM: ObservableObject {
     func showCacheSize() {
         let wallpaperCacheSize = WallpaperManager.shared.cacheSize()
         let backNoisesCacheSize = BackNoisesTrackManager.shared.cacheSize()
-        URL.byteCountFormatter.countStyle = .file
-        guard let byteCount = URL.byteCountFormatter.string(for: wallpaperCacheSize + backNoisesCacheSize) else { return }
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .file
+        guard let byteCount = formatter.string(for: wallpaperCacheSize + backNoisesCacheSize) else { return }
         model.cacheSize = byteCount
     }
 

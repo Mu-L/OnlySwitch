@@ -9,8 +9,10 @@ import Foundation
 import SwiftUI
 import Switches
 
-struct Preferences {
-    static var shared = Preferences()
+final class Preferences: @unchecked Sendable {
+    static let shared = Preferences()
+
+    private init() {}
 
     // MARK: - Pomodoro Timer
     @UserDefaultValue(key: UserDefaults.Key.WorkDuration, defaultValue: 25 * 60)

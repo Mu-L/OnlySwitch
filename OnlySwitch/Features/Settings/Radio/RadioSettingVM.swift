@@ -164,11 +164,10 @@ class RadioSettingVM: ObservableObject {
 
         NotificationCenter.default.addObserver(forName: .illegalRadioInfoNotification,
                                                object: nil,
-                                               queue: .main) { @Sendable [self] notify in
-            Task { @MainActor in
-                self.model.errorInfo = notify.object as! String
-                self.model.showErrorToast = true
-            }
+                                               queue: .main) { [weak self] notify in
+            guard let self else { return }
+            self.model.errorInfo = notify.object as! String
+            self.model.showErrorToast = true
         }
 
         self.model.currentTitle = RadioStationSwitch.shared.playerItem.title
@@ -191,10 +190,6 @@ class RadioSettingVM: ObservableObject {
             self.objectWillChange.send()
         }
         .store(in: &cancellables)
-    }
-
-    deinit {
-        cancellables.removeAll()
     }
 
     func endEditing() {

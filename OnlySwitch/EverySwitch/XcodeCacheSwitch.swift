@@ -9,7 +9,7 @@ import Foundation
 import AppKit
 import Switches
 
-final class XcodeCacheSwitch: SwitchProvider {
+final class XcodeCacheSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .xcodeCache
 

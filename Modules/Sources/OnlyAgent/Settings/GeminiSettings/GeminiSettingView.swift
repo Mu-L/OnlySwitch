@@ -11,7 +11,7 @@ import Design
 
 @available(macOS 26.0, *)
 public struct GeminiSettingView: View {
-    @Perception.Bindable var store: StoreOf<GeminiSettingReducer>
+    @SwiftUI.Bindable var store: StoreOf<GeminiSettingReducer>
     
     public init(store: StoreOf<GeminiSettingReducer>) {
         self.store = store

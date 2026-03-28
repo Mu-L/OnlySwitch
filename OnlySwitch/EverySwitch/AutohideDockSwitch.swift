@@ -9,7 +9,7 @@ import AppKit
 import Switches
 import Defines
 
-final class AutohideDockSwitch: SwitchProvider {
+final class AutohideDockSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .autohideDock
 

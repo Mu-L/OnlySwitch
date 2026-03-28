@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class ShowFinderPathbarSwitch: SwitchProvider {
+final class ShowFinderPathbarSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .showFinderPathbar
     weak var delegate: SwitchDelegate?
 

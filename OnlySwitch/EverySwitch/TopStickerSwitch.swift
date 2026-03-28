@@ -12,7 +12,7 @@ import ComposableArchitecture
 import Switches
 import Combine
 
-final class TopStickerSwitch: SwitchProvider {
+final class TopStickerSwitch: SwitchProvider, @unchecked Sendable {
 
     static let shared = TopStickerSwitch()
 
@@ -72,7 +72,7 @@ final class TopStickerSwitch: SwitchProvider {
 
 // MARK: - StickerWindowManager
 
-final class StickerWindowManager {
+final class StickerWindowManager: @unchecked Sendable {
     static let shared = StickerWindowManager()
 
     private(set) var isShowing: Bool = false

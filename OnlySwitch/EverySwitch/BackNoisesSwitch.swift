@@ -8,7 +8,7 @@
 import Foundation
 import Switches
 
-final class BackNoisesSwitch: SwitchProvider {
+final class BackNoisesSwitch: SwitchProvider, @unchecked Sendable {
     
     var type: SwitchType = .backNoises
     

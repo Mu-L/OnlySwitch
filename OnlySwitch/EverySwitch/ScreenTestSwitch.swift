@@ -10,7 +10,7 @@ import AppKit
 import SwiftUI
 import Switches
 
-final class ScreenTestSwitch: SwitchProvider, CurrentScreen {
+final class ScreenTestSwitch: SwitchProvider, CurrentScreen, @unchecked Sendable {
 
     static let shared = ScreenTestSwitch()
     
@@ -47,7 +47,7 @@ final class ScreenTestSwitch: SwitchProvider, CurrentScreen {
     }
     
     private func checkAccessbilityEnabled() -> Bool {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
+        let options: NSDictionary = ["AXTrustedCheckOptionPrompt": true]
         return AXIsProcessTrustedWithOptions(options)
     }
 }

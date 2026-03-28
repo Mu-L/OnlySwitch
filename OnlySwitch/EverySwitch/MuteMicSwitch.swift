@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class MuteMicSwitch: SwitchProvider {
+final class MuteMicSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .muteMicrophone
     weak var delegate: SwitchDelegate?
 

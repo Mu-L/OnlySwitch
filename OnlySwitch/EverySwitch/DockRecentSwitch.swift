@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class DockRecentSwitch: SwitchProvider {
+final class DockRecentSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .dockRecent
     weak var delegate: SwitchDelegate?
 

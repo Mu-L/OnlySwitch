@@ -15,7 +15,7 @@ let defaultRadioStations = [
     ["title":"Box UK", "url":"http://51.75.170.46:6191/stream"]
 ]
 
-final class RadioStationSwitch:SwitchProvider {
+final class RadioStationSwitch:SwitchProvider, @unchecked Sendable {
     static let shared = RadioStationSwitch()
     var type: SwitchType = .radioStation
     weak var delegate: SwitchDelegate?

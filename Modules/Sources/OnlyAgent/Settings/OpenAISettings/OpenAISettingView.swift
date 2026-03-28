@@ -11,7 +11,7 @@ import Design
 
 @available(macOS 26.0, *)
 public struct OpenAISettingView: View {
-    @Perception.Bindable var store: StoreOf<OpenAISettingReducer>
+    @SwiftUI.Bindable var store: StoreOf<OpenAISettingReducer>
     
     public init(store: StoreOf<OpenAISettingReducer>) {
         self.store = store

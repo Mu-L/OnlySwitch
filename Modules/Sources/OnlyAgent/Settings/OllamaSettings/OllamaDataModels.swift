@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct OllamaModels: Codable {
+public struct OllamaModels: Codable, Sendable {
     public let models: [OllamaTag]
 }
 
-public struct OllamaTag: Codable, Identifiable, Equatable, AIModel {
+public struct OllamaTag: Codable, Identifiable, Equatable, Sendable, AIModel {
     public let model: String
     public let digest: String
     

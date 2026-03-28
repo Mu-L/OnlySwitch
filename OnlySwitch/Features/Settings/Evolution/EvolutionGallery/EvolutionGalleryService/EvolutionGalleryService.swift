@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct EvolutionGalleryService {
+struct EvolutionGalleryService: Sendable {
     var fetchGalleryList: @Sendable () async throws -> [EvolutionGalleryItem]
-    var checkInstallation: (UUID) -> Bool
+    var checkInstallation: @Sendable (UUID) -> Bool
     var addGallery: @Sendable (EvolutionItem) async throws -> Void
 }

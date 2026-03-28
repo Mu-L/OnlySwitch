@@ -11,7 +11,7 @@ import AVKit
 import MediaPlayer
 import Switches
 
-class JLAVAudioPlayer: NSObject ,AVPlayerItemMetadataOutputPushDelegate, AudioPlayer {
+final class JLAVAudioPlayer: NSObject, @preconcurrency AVPlayerItemMetadataOutputPushDelegate, AudioPlayer {
     
     var audioPlayer: AVPlayer?
     var avaudioPlayer:AVAudioPlayer?

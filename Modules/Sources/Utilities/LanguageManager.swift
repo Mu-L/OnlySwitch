@@ -9,6 +9,7 @@ import Foundation
 import Defines
 import Extensions
 
+@MainActor
 public class LanguageManager: ObservableObject {
     private let languageUserDefaults = UserDefaults(suiteName: "\(Bundle.appIdentifier)OnlySwitch.shared")
     public static let sharedManager = LanguageManager()

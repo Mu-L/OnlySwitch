@@ -6,24 +6,20 @@
 //
 
 import Dependencies
+import DependenciesMacros
 import Foundation
 
-struct KeyLightService {
-    var loadKeyboardManager: () -> Void
-    var setBrightness: (Double) -> Void
-    var brightness: () -> Double
-    var setAutoBrightness: (Bool) -> Void
-    var autoBrightness: () -> Bool
+@DependencyClient
+struct KeyLightService: Sendable {
+    var loadKeyboardManager: @Sendable () -> Void
+    var setBrightness: @Sendable (Double) -> Void
+    var brightness: @Sendable () -> Double = { 0.0 }
+    var setAutoBrightness: @Sendable (Bool) -> Void
+    var autoBrightness: @Sendable () -> Bool = { false }
 }
 
 extension KeyLightService: TestDependencyKey {
-    static let testValue: KeyLightService = .init(
-        loadKeyboardManager: unimplemented("\(Self.self).loadKeyboardManager"),
-        setBrightness: unimplemented("\(Self.self).setBrightness"),
-        brightness: unimplemented("\(Self.self).brightness"),
-        setAutoBrightness: unimplemented("\(Self.self).setAutoBrightness"),
-        autoBrightness: unimplemented("\(Self.self).autoBrightness")
-    )
+    static let testValue: KeyLightService = Self()
 }
 
 extension DependencyValues {

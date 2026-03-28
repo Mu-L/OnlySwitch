@@ -7,7 +7,7 @@
 
 import AppKit
 
-class WallpaperManager {
+final class WallpaperManager: @unchecked Sendable {
     enum WallpaperError:Error {
         case ExistsIgnoredFile
     }

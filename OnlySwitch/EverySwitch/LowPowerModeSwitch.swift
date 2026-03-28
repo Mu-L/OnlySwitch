@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Defines
 
-final class LowPowerModeSwitch: SwitchProvider {
+final class LowPowerModeSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .lowpowerMode
     weak var delegate: SwitchDelegate?
 

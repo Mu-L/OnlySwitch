@@ -16,7 +16,7 @@ struct PersistenceController {
         container = NSPersistentContainer(name: "OnlySwitch")
         let viewContext = container.viewContext
         viewContext.automaticallyMergesChangesFromParent = true
-        viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
 
         let storeURL = URL.storeURL(for: "\(Bundle.appIdentifier)OnlySwitch.shared", databaseName: "onlyswitch")
 

@@ -7,8 +7,8 @@ import Foundation
 import Switches
 import Defines
 
-final class AuthenticatorSwitch: SwitchProvider {
-    static let shared = AuthenticatorSwitch()
+final class AuthenticatorSwitch: SwitchProvider, @unchecked Sendable {
+    @MainActor static let shared = AuthenticatorSwitch()
 
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .authenticator

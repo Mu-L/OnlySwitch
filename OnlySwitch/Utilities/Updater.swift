@@ -8,7 +8,7 @@
 import Sparkle
 import AppKit
 
-class Updater: ObservableObject {
+final class Updater: ObservableObject, @unchecked Sendable {
 
     private let updaterController: SPUStandardUpdaterController
 
@@ -21,7 +21,9 @@ class Updater: ObservableObject {
     }
 
     static func checkForUpdates() {
-        shared.updaterController.checkForUpdates(.none)
+        Task { @MainActor in
+            shared.updaterController.checkForUpdates(.none)
+        }
     }
 
 }

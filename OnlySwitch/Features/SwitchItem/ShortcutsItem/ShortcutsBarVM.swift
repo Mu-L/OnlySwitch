@@ -9,7 +9,7 @@ import Foundation
 import Switches
 import Sharing
 
-class ShortcutsBarVM: BarProvider, ObservableObject {
+final class ShortcutsBarVM: BarProvider, ObservableObject, @unchecked Sendable {
     
     @Published private var model = ShortcutsBarModel()
     @Shared(.appStorage(UserDefaults.Key.hideMenuAfterRunning)) var hideMenuAfterRunningShared: Bool = false

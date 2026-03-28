@@ -7,7 +7,9 @@
 
 import Foundation
 struct SystemInfo{
-    static let infoDictionary = Bundle.main.infoDictionary
+    static var infoDictionary: [String: Any]? {
+        Bundle.main.infoDictionary
+    }
     static var appDisplayName:AnyObject? {
         infoDictionary!["CFBundleDisplayName"] as AnyObject //app name
     }

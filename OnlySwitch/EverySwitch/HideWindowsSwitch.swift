@@ -10,7 +10,7 @@ import AppKit
 import Switches
 import Defines
 
-final class HideWindowsSwitch: SwitchProvider {
+final class HideWindowsSwitch: SwitchProvider, @unchecked Sendable {
     var type: SwitchType = .hideWindows
     
     var delegate: SwitchDelegate?

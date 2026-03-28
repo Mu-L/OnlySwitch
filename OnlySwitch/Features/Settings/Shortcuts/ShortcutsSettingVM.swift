@@ -46,14 +46,15 @@ class ShortcutsItem: ObservableObject {
     }
     
     func doShortcuts() {
+        let shortcutName = self.name
         Task {
-            _ = try? await ShorcutsCMD.runShortcut(name: self.name).runAppleScript(isShellCMD: true)
+            _ = try? await ShorcutsCMD.runShortcut(name: shortcutName).runAppleScript(isShellCMD: true)
         }
     }
     
 }
 
-class ShortcutsSettingVM:ObservableObject {
+final class ShortcutsSettingVM:ObservableObject, @unchecked Sendable {
     static let shared = ShortcutsSettingVM()
     
     var shortcutsList:[ShortcutsItem] {
@@ -225,5 +226,3 @@ class SharedShortcutsItem:ObservableObject {
         self.shortcutInfo = shortcutInfo
     }
 }
-
-

@@ -9,7 +9,7 @@ import AppKit
 import Switches
 import Defines
 
-final class HiddenFilesSwitch: SwitchProvider {
+final class HiddenFilesSwitch: SwitchProvider, @unchecked Sendable {
     weak var delegate: SwitchDelegate?
     var type: SwitchType = .hiddenFiles
 

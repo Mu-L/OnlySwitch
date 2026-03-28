@@ -10,6 +10,7 @@ import Defines
 import Switches
 
 extension SwitchType {
+    @MainActor
     func getNewSwitchInstance() -> SwitchProvider {
         switch self {
         case .hiddeDesktop:
@@ -91,6 +92,7 @@ extension SwitchType {
         }
     }
     
+    @MainActor
     func doSwitch() {
         Task { @MainActor in
             let switchOperator = getNewSwitchInstance()

@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 import SwiftUI
 
-class GitHubPresenter: ObservableObject, GitHubRepositoryProtocol{
+final class GitHubPresenter: ObservableObject, GitHubRepositoryProtocol, @unchecked Sendable{
     
     static let shared = GitHubPresenter()
     

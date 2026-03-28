@@ -15,8 +15,8 @@ import os.log
 
 
 // MARK: -
-var packetDescs:[UnsafeMutablePointer<AudioStreamPacketDescription>?] = []
-var packetDatas:[UnsafeMutableRawPointer?] = []
+nonisolated(unsafe) var packetDescs:[UnsafeMutablePointer<AudioStreamPacketDescription>?] = []
+nonisolated(unsafe) var packetDatas:[UnsafeMutableRawPointer?] = []
 
 func ReaderConverterCallback(_ converter: AudioConverterRef,
                              _ packetCount: UnsafeMutablePointer<UInt32>,
