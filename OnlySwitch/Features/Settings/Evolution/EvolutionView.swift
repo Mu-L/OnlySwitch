@@ -10,25 +10,10 @@ import ComposableArchitecture
 import SwiftUI
 
 struct EvolutionView: View {
-
     let store: StoreOf<EvolutionReducer>
-    @ObservedObject var viewStore: ViewStore<ViewState, EvolutionReducer.Action>
-
-    struct ViewState: Equatable {
-        let destinationTag: EvolutionReducer.DestinationState.Tag?
-
-        init(state: EvolutionReducer.State) {
-            self.destinationTag = state.destination?.tag
-        }
-    }
-
-    init(store: StoreOf<EvolutionReducer>) {
-        self.store = store
-        self.viewStore = ViewStore(store, observe: ViewState.init)
-    }
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             NavigationStack {
                 HStack {
                     VStack {
@@ -38,20 +23,20 @@ struct EvolutionView: View {
                         }
                         Divider()
                         ScrollView(.vertical) {
-                            if viewStore.evolutionList.isEmpty {
+                            if store.evolutionList.isEmpty {
                                 Text("You can DIY switches or buttons here.".localized())
                                 Button("Refresh".localized()) {
-                                    viewStore.send(.refresh)
+                                    store.send(.refresh)
                                 }
                             } else {
                                 VStack {
-                                    ForEachStore(
+                                    ForEach(
                                         store.scope(
                                             state: \.evolutionList,
                                             action: \.editor
                                         )
                                     ) { itemStore in
-                                        evolutionItemView(viewStore: viewStore, itemStore: itemStore)
+                                        evolutionItemView(itemStore: itemStore)
                                     }
                                 }
 
@@ -59,7 +44,7 @@ struct EvolutionView: View {
                             }
                         }
                         .onTapGesture {
-                            viewStore.send(.select(nil))
+                            store.send(.select(nil))
                         }
                         .padding(.top, 10)
 
@@ -67,34 +52,22 @@ struct EvolutionView: View {
                             Text("Pre-execution")
                             TextField(
                                 "e.g: source ~/.zshrc",
-                                text: viewStore.binding(
-                                        get: { $0.preExecution},
-                                        send: { .setPreExecution($0) }
+                                text: Binding(
+                                    get: { store.preExecution },
+                                    set: { store.send(.setPreExecution($0)) }
                                     )
                             )
                         }
 
                         HStack {
-                            NavigationLink(
-                                destination:
-                                    IfLetStore(
-                                        store.scope(
-                                            state: \.editorState,
-                                            action: EvolutionReducer.Action.editorAction)
-                                    ) { editorStore in
-                                        EvolutionEditorView(store: editorStore)
-                                    },
-                                tag: EvolutionReducer.DestinationState.Tag.editor,
-                                selection: viewStore.binding(
-                                    get: { _ in self.viewStore.destinationTag },
-                                    send: { EvolutionReducer.Action.setNavigation(tag:$0) }
-                                )
-                            ) {
+                            Button {
+                                store.send(.setNavigation(tag: .editor))
+                            } label: {
                                 Text("+")
                             }
 
                             Button(action: {
-                                viewStore.send(.remove)
+                                store.send(.remove)
                             }) {
                                 Text("-")
                             }
@@ -108,15 +81,32 @@ struct EvolutionView: View {
                     EvolutionGalleryView(
                         store: store.scope(
                             state: \.galleryState,
-                            action: EvolutionReducer.Action.galleryAction
+                            action: \.galleryAction
                         )
                     )
                 }
                 .padding([.top, .leading], 10)
+                .navigationDestination(
+                    isPresented: Binding(
+                        get: { store.destination?.tag == .editor },
+                        set: { isPresented in
+                            if !isPresented {
+                                store.send(.setNavigation(tag: nil))
+                            }
+                        }
+                    )
+                ) {
+                    if let editorStore = store.scope(
+                        state: \.editorState,
+                        action: \.editorAction
+                    ) {
+                        EvolutionEditorView(store: editorStore)
+                    }
+                }
             }
-            .toast(isPresenting: viewStore.binding(
-                get: { $0.showError },
-                send: { .errorControl($0) }
+            .toast(isPresenting: Binding(
+                get: { store.showError },
+                set: { store.send(.errorControl($0)) }
             ),
                    alert: {
                 AlertToast(
@@ -127,25 +117,24 @@ struct EvolutionView: View {
             }
             )
             .task {
-                await viewStore.send(.refresh).finish()
+                await store.send(.refresh).finish()
             }
         }
     }
 
     @ViewBuilder
     func evolutionItemView(
-        viewStore: ViewStore<EvolutionReducer.State, EvolutionReducer.Action>,
         itemStore: StoreOf<EvolutionRowReducer>
     ) -> some View {
-        WithViewStore(itemStore, observe:{ $0 }) { itemViewStore in
+        WithPerceptionTracking {
             EvolutionRowView(store: itemStore)
             .background(
-                viewStore.selectID == itemViewStore.id
+                store.selectID == itemStore.id
                 ? Color.accentColor
                 : Color.gray.opacity(0.1)
             )
             .onTapGesture {
-                viewStore.send(.select(itemViewStore.id))
+                store.send(.select(itemStore.id))
             }
         }
     }

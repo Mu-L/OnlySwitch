@@ -21,22 +21,22 @@ struct EvolutionEditorView: View {
     let store: StoreOf<EvolutionEditorReducer>
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             VStack {
                 HStack {
                     Text("Name:".localized())
                     TextField("",
-                              text: viewStore.binding(
-                                get: { $0.evolution.name },
-                                send: { .changeName($0) }
+                              text: Binding(
+                                get: { store.evolution.name },
+                                set: { store.send(.changeName($0)) }
                               )
                     )
                     Spacer()
                     Text("Icon:".localized())
                     Image(
-                        systemName: viewStore.evolution.iconName ??
+                        systemName: store.evolution.iconName ??
                         (
-                            viewStore.evolution.controlType == .Switch
+                            store.evolution.controlType == .Switch
                             ? "lightswitch.on.square"
                             : "button.programmable.square.fill"
                         )
@@ -45,12 +45,12 @@ struct EvolutionEditorView: View {
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .onTapGesture {
-                        viewStore.send(.toggleIconNamesPopover(!viewStore.showIconNamesPopover))
+                        store.send(.toggleIconNamesPopover(!store.showIconNamesPopover))
                     }
                     .popover(
-                        isPresented: viewStore.binding(
-                            get: { $0.showIconNamesPopover },
-                            send: { .toggleIconNamesPopover($0) }
+                        isPresented: Binding(
+                            get: { store.showIconNamesPopover },
+                            set: { store.send(.toggleIconNamesPopover($0)) }
                         )
                     ) {
                         ScrollView(.vertical) {
@@ -58,12 +58,12 @@ struct EvolutionEditorView: View {
                                 ForEach(EvolutionEditorView.iconNames, id: \.self) { name in
                                     Button(
                                         action: {
-                                            viewStore.send(.selectIcon(name))
+                                            store.send(.selectIcon(name))
                                         }
                                     ) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
-                                                .foregroundColor(iconBackground(viewStore: viewStore, name: name))
+                                                .foregroundColor(iconBackground(name: name))
                                                 .frame(width: 30, height: 30)
 
                                             Image(systemName: name)
@@ -74,7 +74,7 @@ struct EvolutionEditorView: View {
 
                                     }
                                     .buttonStyle(.plain)
-                                    .background(iconBackground(viewStore: viewStore, name: name))
+                                    .background(iconBackground(name: name))
                                 }
                             }
                             .frame(width: 150)
@@ -85,9 +85,9 @@ struct EvolutionEditorView: View {
                 }
 
                 Picker("",
-                       selection: viewStore.binding(
-                        get: { $0.evolution.controlType },
-                        send: { .changeType($0) }
+                       selection: Binding(
+                        get: { store.evolution.controlType },
+                        set: { store.send(.changeType($0)) }
                        )
                 ) {
                     Text("Switch".localized()).tag(ControlType.Switch)
@@ -97,7 +97,7 @@ struct EvolutionEditorView: View {
 
                 ScrollView(.vertical) {
                     VStack {
-                        ForEachStore(
+                        ForEach(
                             store.scope(
                                 state: \.commandStates,
                                 action: \.commandAction
@@ -113,7 +113,7 @@ struct EvolutionEditorView: View {
                     Spacer()
                     Text("Can be saved after passing all tests".localized())
                     Button(action: {
-                        viewStore.send(.save)
+                        store.send(.save)
                     }) {
                         Text("Save".localized())
                     }
@@ -126,9 +126,9 @@ struct EvolutionEditorView: View {
 
             }
             .toast(
-                isPresenting: viewStore.binding(
-                    get: { $0.showError },
-                    send: { .errorControl($0) }
+                isPresenting: Binding(
+                    get: { store.showError },
+                    set: { store.send(.errorControl($0)) }
                 ),
                 alert: {
                     AlertToast(
@@ -141,11 +141,11 @@ struct EvolutionEditorView: View {
         }
     }
 
-    func iconBackground(viewStore: ViewStore<EvolutionEditorReducer.State, EvolutionEditorReducer.Action>, name: String) -> Color {
-        guard let currentIconName = viewStore.evolution.iconName else {
-            if (viewStore.evolution.controlType == .Button &&
+    func iconBackground(name: String) -> Color {
+        guard let currentIconName = store.evolution.iconName else {
+            if (store.evolution.controlType == .Button &&
                 name == "button.programmable.square.fill") ||
-                (viewStore.evolution.controlType == .Switch &&
+                (store.evolution.controlType == .Switch &&
                 name == "lightswitch.on.square") {
                 return .accentColor
             } else {

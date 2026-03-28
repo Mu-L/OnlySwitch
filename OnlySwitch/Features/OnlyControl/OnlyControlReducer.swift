@@ -199,13 +199,13 @@ struct OnlyControlReducer {
 
     private func refreshDashboard() -> EffectOf<Self> {
         .run { @MainActor send in
-            let switches = await client.fetchSwitchList()
+            let switches = client.fetchSwitchList()
             for switchControl in switches {
                 let isOn = await switchControl.switchOperator.currentStatus()
                 switchControl.isOn = isOn
             }
-            let shortcuts = await client.fetchShortcutsList()
-            let evolutions = await client.fetchEvolutionList()
+            let shortcuts = client.fetchShortcutsList()
+            let evolutions = client.fetchEvolutionList()
             for evolutionControl in evolutions {
                 await evolutionControl.refresh()
             }

@@ -33,7 +33,7 @@ struct EvolutionGalleryView: View {
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10) {
-                        ForEachStore(
+                        ForEach(
                             store.scope(
                                 state: \.galleryList,
                                 action: \.itemAction

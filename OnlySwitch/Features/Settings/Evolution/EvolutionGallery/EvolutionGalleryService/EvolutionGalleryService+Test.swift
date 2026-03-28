@@ -10,11 +10,7 @@ import Foundation
 import XCTestDynamicOverlay
 
 extension EvolutionGalleryService: TestDependencyKey {
-    static let testValue = Self(
-        fetchGalleryList: unimplemented("\(Self.self).fetchGalleryList"),
-        checkInstallation: unimplemented("\(Self.self).checkInstallation"),
-        addGallery: unimplemented("\(Self.self).addGallery")
-    )
+    static let testValue = Self()
 }
 
 extension EvolutionGalleryService {

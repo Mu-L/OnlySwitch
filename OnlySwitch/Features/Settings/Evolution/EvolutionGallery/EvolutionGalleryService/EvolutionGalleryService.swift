@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import Dependencies
+import DependenciesMacros
 
+@DependencyClient
 struct EvolutionGalleryService: Sendable {
-    var fetchGalleryList: @Sendable () async throws -> [EvolutionGalleryItem]
-    var checkInstallation: @Sendable (UUID) -> Bool
+    var fetchGalleryList: @Sendable () async throws -> [EvolutionGalleryItem] = { [] }
+    var checkInstallation: @Sendable (UUID) -> Bool = { _ in false }
     var addGallery: @Sendable (EvolutionItem) async throws -> Void
 }

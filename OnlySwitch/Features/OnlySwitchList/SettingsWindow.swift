@@ -9,6 +9,7 @@ import Defines
 import Foundation
 import AppKit
 
+@MainActor
 class SettingsWindow: NSWindow, NSWindowDelegate {
     static var shared = SettingsWindow()
     var isShowing = false
@@ -30,25 +31,28 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
             object: nil,
             queue: .main
         ) { [weak self] notify in
-            guard let self else { return }
-            if let window = notify.object as? NSWindow {
-                if !self.isInitialized {
-                    self.contentViewController = window.contentViewController
-                    self.title = window.title
-                    self.setFrame(window.frame, display: false)
-                    self.isInitialized = true
-                    self.makeKeyAndOrderFront(nil)
+            let window = notify.object as? NSWindow
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                if let window {
+                    if !self.isInitialized {
+                        self.contentViewController = window.contentViewController
+                        self.title = window.title
+                        self.setFrame(window.frame, display: false)
+                        self.isInitialized = true
+                        self.makeKeyAndOrderFront(nil)
 
-                    var windowFrame = self.frame
-                    windowFrame.size.height = Layout.settingWindowHeight
-                    self.setFrame(windowFrame, display: true)
-                    self.styleMask.remove(.resizable)
-                    window.close()
-                } else {
-                    if !self.isShowing {
-                        self.show()
+                        var windowFrame = self.frame
+                        windowFrame.size.height = Layout.settingWindowHeight
+                        self.setFrame(windowFrame, display: true)
+                        self.styleMask.remove(.resizable)
+                        window.close()
+                    } else {
+                        if !self.isShowing {
+                            self.show()
+                        }
+                        window.close()
                     }
-                    window.close()
                 }
             }
         }
@@ -58,8 +62,10 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.isShowing = false
-            NSApp.activate(ignoringOtherApps: false)
+            Task { @MainActor [weak self] in
+                self?.isShowing = false
+                NSApp.activate(ignoringOtherApps: false)
+            }
         }
 
         NotificationCenter.default.addObserver(
@@ -67,8 +73,10 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.contentViewController?
-                .tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
+            Task { @MainActor [weak self] in
+                self?.contentViewController?
+                    .tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
+            }
         }
     }
 

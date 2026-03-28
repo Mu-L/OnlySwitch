@@ -12,7 +12,7 @@ struct KeyLightView: View {
     let store: StoreOf<KeyLightFeature>
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             Form {
                 // MARK: - Brightness Section
                 Section {
@@ -20,21 +20,21 @@ struct KeyLightView: View {
                         Text("Brightness:".localized())
                         Spacer()
                         Slider(
-                            value: viewStore.binding(
-                                get: { _ in viewStore.brightness },
-                                send: { .setBrightness($0) }
+                            value: Binding(
+                                get: { store.brightness },
+                                set: { store.send(.setBrightness($0)) }
                             )
                         )
                         .frame(width: 120)
-                        Text("\(Int(viewStore.brightness * 100))%")
+                        Text("\(Int(store.brightness * 100))%")
                             .frame(width: 40, alignment: .trailing)
                     }
                     
                     Toggle(
                         "Adjust keyboard brightness in low light".localized(),
-                        isOn: viewStore.binding(
-                            get: { _ in viewStore.autoBrightness },
-                            send: { .setAutoBrightness($0) }
+                        isOn: Binding(
+                            get: { store.autoBrightness },
+                            set: { store.send(.setAutoBrightness($0)) }
                         )
                     )
                 } header: {
@@ -43,7 +43,7 @@ struct KeyLightView: View {
             }
             .formStyle(.grouped)
             .onAppear {
-                viewStore.send(.viewAppeared)
+                store.send(.viewAppeared)
             }
         }
     }

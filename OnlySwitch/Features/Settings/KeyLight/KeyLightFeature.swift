@@ -9,6 +9,7 @@ import ComposableArchitecture
 import Foundation
 
 struct KeyLightFeature: Reducer {
+    @ObservableState
     struct State: Equatable {
         var brightness = 0.0
         var autoBrightness = false

@@ -13,7 +13,6 @@ import Switches
 
 @MainActor
 class RadioSettingVM: ObservableObject {
-
     @Published fileprivate var model = RadioSettingModel()
     private var preferencesPublisher = PreferencesObserver.shared
     @Published private var preferences = PreferencesObserver.shared.preferences

@@ -228,12 +228,15 @@ class StatusBarController {
             object: nil,
             queue: .main
         ) { [weak self] notify in
-            guard let self else { return }
-            guard let newImageName = notify.object as? String else {
-                print("⚠️ Invalid object type for changeMenuBarIcon notification")
-                return
+            let newImageName = notify.object as? String
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                guard let newImageName else {
+                    print("⚠️ Invalid object type for changeMenuBarIcon notification")
+                    return
+                }
+                self.setMainItemButton(image: newImageName)
             }
-            self.setMainItemButton(image: newImageName)
         }
 
         NotificationCenter.default.addObserver(
@@ -265,8 +268,11 @@ class StatusBarController {
             object: nil,
             queue: .main
         ) { [weak self] notify in
-            guard let self, let isOn = notify.object as? Bool else { return }
-            self.markItem?.length = isOn ? MarkItemLength.collapse : MarkItemLength.normal
+            let isOn = notify.object as? Bool
+            Task { @MainActor [weak self] in
+                guard let self, let isOn else { return }
+                self.markItem?.length = isOn ? MarkItemLength.collapse : MarkItemLength.normal
+            }
         }
 
         NotificationCenter.default.addObserver(
@@ -274,18 +280,20 @@ class StatusBarController {
             object: nil,
             queue: .main
         ) { [weak self] notify in
-            guard let self, let enable = notify.object as? Bool else { return }
-            if enable {
-                self.setMarkButton()
-                Task {
-                    try? await HideMenubarIconsSwitch.shared.operateSwitch(isOn: false)
+            let enable = notify.object as? Bool
+            Task { @MainActor [weak self] in
+                guard let self, let enable else { return }
+                if enable {
+                    self.setMarkButton()
+                    Task {
+                        try? await HideMenubarIconsSwitch.shared.operateSwitch(isOn: false)
+                    }
+                } else if let markItem = self.markItem {
+                    // macOS 26 Tahoe: Safely remove status item
+                    NSStatusBar.system.removeStatusItem(markItem)
+                    self.markItem = nil
+                    print("✅ Mark button removed successfully")
                 }
-
-            } else if let markItem = self.markItem {
-                // macOS 26 Tahoe: Safely remove status item
-                NSStatusBar.system.removeStatusItem(markItem)
-                self.markItem = nil
-                print("✅ Mark button removed successfully")
             }
         }
     }
