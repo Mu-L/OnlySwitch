@@ -18,6 +18,7 @@ public struct PromptDialogueReducer {
         public var isSuccess: Bool? = nil
         var appleScript: String = ""
         var isAgentMode: Bool = false
+        var showAppleScriptEditor: Bool = true
         var isGenerating: Bool = false
         var isExecuting: Bool = false
         var errorMessage: String? = nil
@@ -31,6 +32,7 @@ public struct PromptDialogueReducer {
         var sendButtonDisabled: Bool { isGenerating || isExecuting || isPromptEmpty }
         var shouldShowExecuteButton: Bool { !isAgentMode && !isExecuting && !isAppleScriptEmpty }
         var currentModelName: String? { currentAIModel?.model }
+        var shouldShowAppleScriptEditor: Bool { showAppleScriptEditor && !isAppleScriptEmpty && !isMultiStepMode }
         
         // Multi-step execution state
         var executionPlan: [ExecutionStep]? = nil
@@ -46,10 +48,12 @@ public struct PromptDialogueReducer {
             prompt: String = "",
             appleScript: String = "",
             isAgentMode: Bool = false,
+            showAppleScriptEditor: Bool = true,
         ) {
             self.prompt = prompt
             self.appleScript = appleScript
             self.isAgentMode = isAgentMode
+            self.showAppleScriptEditor = showAppleScriptEditor
         }
     }
     
@@ -108,6 +112,8 @@ public struct PromptDialogueReducer {
                     state.opacity = 1.0
                     state.blurRadius = 0.0
                     state.isSuccess = nil
+                    state.isMultiStepMode = false
+                    state.executionPlan = nil
                     return .run { send in
                         await send(
                             .loadModels(

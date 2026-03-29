@@ -35,7 +35,7 @@ public struct PromptDialogueView: View {
                     
                 promptActionView
                 
-                if !store.isAppleScriptEmpty && !store.isMultiStepMode {
+                if store.shouldShowAppleScriptEditor {
                     separatorView
                     
                     appleScriptEditor
@@ -251,6 +251,7 @@ public struct PromptDialogueView: View {
             }
             .menuIndicator(.visible)
             Spacer()
+            Toggle("Show Script".localized(), isOn: $store.showAppleScriptEditor)
             Toggle("Agent Mode".localized(), isOn: $store.isAgentMode)
                 .disabled(store.agentToggleDisabled)
         }
